@@ -1,0 +1,27 @@
+# ENB network
+ENB1_S1U_DEV={{ enb1_s1u_interface.stdout }}
+ENB1_S1U_IP={{ enb1_s1u_ip }}
+ENB1_S1U_NET={{ enb1_s1u_netmask }}
+#ENB2_S1U_DEV=ens6:1
+#ENB2_S1U_IP=111.0.0.4
+#ENB2_S1U_NET=24
+
+# MME network
+MME_S11_DEV={{ mme_s11_interface.stdout }}
+MME_S11_IP={{ mme_s11_ip }}
+MME_S11_NET={{ mme_s11_netmask }}
+
+# SAEGW network
+SGW_S11_IP={{ spgw_s11_ip }}
+
+# Application Server network
+AS_DEV={{ appserver_sgi_interface.stdout }}
+AS_IP={{ appserver_sgi_ip }}
+AS_GW={{ appserver_sgi_gateway }}
+AS_NET={{ appserver_sgi_netmask }}
+
+# Control (ssh) network
+SSH_NG40_RAN={{ ssh_venb_ip }}
+SSH_NGIC_CP_IP={{ ssh_vspgwc_ip }}
+SSH_NGIC_DP_IP={{ ssh_vspgwu_ip }}
+SSH_NGIC_FPC_IP={{ fpc_management_ip }}

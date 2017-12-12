@@ -1,0 +1,66 @@
+# Copyright 2017-present Open Networking Foundation
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+# http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+---
+- name: Set SSH password
+  set_fact:
+    ansible_ssh_pass: "{{ password }}"
+
+- name: check flat_network interface
+  shell: ifconfig | grep -B1 "inet addr:{{ ts_ip }}" | awk '$1!="inet" && $1!="--" {print $1}'
+  args:
+    executable: /bin/bash
+  register: iface
+
+- name: disable TAS process
+  command: disable-tas
+
+- name: enable TS process
+  command: enable-ts
+
+- name: test response to test.py
+  expect:
+    command: ipcfg
+    responses:
+      Configure now?: "n"
+      Do you wish to Continue: "yes"
+      Designate management port: "{{ iface.stdout_lines }}"
+      IP Address: "{{ ts_ip }}"
+      Network Mask: "{{ ts_mask }}"
+      Auto Negotiate: "yes"
+      IP Gateway: "{{ ts_gateway }}"
+      Host Name: "{{ ts_host_name }}"
+      TAS IP Address: "{{ tas_ip }}"
+      NTP Server IP: "{{ ntp_ip }}"
+      System must be rebooted: "no"
+    echo: yes
+
+- name: Re-add network interfaces to configuration
+  sudo: yes
+  notify: reboot node
+  blockinfile:
+    dest: /etc/network/interfaces
+    block: |
+      auto eth1
+      iface eth1 inet dhcp
+      auto eth2
+      iface eth2 inet dhcp
+      auto eth3
+      iface eth3 inet dhcp
+      auto eth4
+      iface eth4 inet dhcp
+      auto eth5
+      iface eth5 inet dhcp
+      auto eth6
+      iface eth6 inet dhcp

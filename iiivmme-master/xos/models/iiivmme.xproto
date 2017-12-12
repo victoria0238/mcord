@@ -1,0 +1,14 @@
+option name = "iiivmme";
+option app_label = "iiivmme";
+
+message IIIVMMEService (Service){
+    option verbose_name = "Virtual IIIVMME Service";
+    required string login_user = 1 [help_text = "iiivMME VM login user", default = "ng40", max_length = 32, content_type = "stripped", null = False, db_index = False, blank = False];
+    required string login_password = 2 [help_text = "iiivMME VM login password", default = "ng40", max_length = 32, content_type = "stripped", null = False, db_index = False, blank = False];
+    required string tas_ip = 3 [help_text = "TAS IP address", default = "103.0.0.100", max_length = 32, null = False, db_index = False, blank = False];
+    required string ntp_ip = 4 [help_text = "NTP server IP address", default = "193.0.0.222", max_length = 32, null = False, db_index = False, blank = False];
+}
+
+message IIIVMMEServiceInstance (TenantWithContainer){
+    option verbose_name = "Virtual IIIVMME Service Instance";
+}
